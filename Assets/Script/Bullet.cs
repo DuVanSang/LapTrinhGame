@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Tốc độ bay của đạn
-    public float flySpeed = 5f; 
-
+    public float flySpeed = 5f;
+    public int damage = 1; 
     void Update()
     {
-        // Lấy vị trí hiện tại
-        var newPosition = transform.position;
+        transform.Translate(Vector3.up * flySpeed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var enemy = collision.GetComponent<EnemyHealth>();
         
-        // Thay đổi tọa độ Y để đạn bay lên trên theo thời gian
-        newPosition.y += Time.deltaTime * flySpeed;
-        
-        // Cập nhật lại vị trí mới cho đạn
-        transform.position = newPosition;
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
+        }
+
+        Destroy(gameObject);
     }
 }
